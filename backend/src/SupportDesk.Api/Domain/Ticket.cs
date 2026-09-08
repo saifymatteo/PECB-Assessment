@@ -3,7 +3,7 @@ namespace SupportDesk.Api.Domain;
 /// <summary>
 /// A customer issue tracked from report to closure.
 /// <para>
-/// This entity is the single home of the ticket business rules (ADR 0002):
+/// This entity is the single home of the ticket business rules:
 /// status transition graph, due-date derivation, closed-is-read-only, and
 /// the active-agent requirement for entering In Progress. Application
 /// services orchestrate persistence around these guards; controllers never

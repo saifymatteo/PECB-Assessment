@@ -5,8 +5,8 @@ using SupportDesk.Api.Domain;
 namespace SupportDesk.Api.Infrastructure;
 
 /// <summary>
-/// Generates unique human-readable references (TCK-YYYY-NNNN) from a per-year counter row
-/// (ADR 0004). The serializable transaction serializes concurrent creations on the counter row.
+/// Generates unique human-readable references (TCK-YYYY-NNNN) from a per-year counter row.
+/// The serializable transaction serializes concurrent creations on the counter row.
 /// </summary>
 public class TicketReferenceGenerator(AppDbContext db)
 {

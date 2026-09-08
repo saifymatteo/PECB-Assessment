@@ -99,8 +99,7 @@ All seven business rules are enforced **on the backend**, in the **domain entiti
 entity means *every* entry point (API, seeder, future importers) is safe by construction,
 the rule set is readable in one file, and the rule tests run as pure unit tests without a
 database (`tests/SupportDesk.Api.Tests`). Application services (`Features/`) only
-orchestrate load → entity method → save; controllers contain no rule logic. See
-`docs/adr/0002-rules-on-domain-entities.md` for the trade-offs.
+orchestrate load → entity method → save; controllers contain no rule logic.
 
 ### Why status changes have a dedicated endpoint
 
@@ -108,7 +107,7 @@ orchestrate load → entity method → save; controllers contain no rule logic. 
 endpoint refuses it. A status change is a *workflow event*: it has preconditions (transition
 graph, active-agent rule) and side effects (system-set timestamps), so it gets its own
 endpoint, its own DTO (a bare `status` field — clients cannot smuggle in `resolvedAt` or
-`dueDate`), and one obvious place for validation. Details in `docs/adr/0003-dedicated-status-endpoint.md`.
+`dueDate`), and one obvious place for validation.
 
 ### Error contract
 
@@ -184,6 +183,5 @@ backend/
 frontend/                         Angular 20 standalone app
   src/app/core/         models, HTTP services, API-error mapping, labels
   src/app/features/     ticket-list, ticket-detail, ticket-dialog
-compose.yml             PostgreSQL for local development
-docs/adr/               architecture decision records
+compose.yml             PostgreSQL + API + nginx-hosted UI for one-command Docker deployment
 ```

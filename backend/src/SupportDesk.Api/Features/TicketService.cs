@@ -21,7 +21,7 @@ public interface ITicketService
 
 /// <summary>
 /// Orchestrates persistence around the domain rules; the rules themselves live on
-/// <see cref="Ticket"/> (ADR 0002). No business decisions are made here.
+/// <see cref="Ticket"/>. No business decisions are made here.
 /// </summary>
 public class TicketService(AppDbContext db, TicketReferenceGenerator referenceGenerator) : ITicketService
 {

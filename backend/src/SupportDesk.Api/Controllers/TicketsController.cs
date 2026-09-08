@@ -36,7 +36,7 @@ public class TicketsController(ITicketService tickets) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, ticket);
     }
 
-    /// <summary>Updates editable fields. Status and assignment have dedicated endpoints (ADR 0003).</summary>
+    /// <summary>Updates editable fields. Status and assignment have dedicated endpoints.</summary>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(TicketDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
@@ -65,7 +65,7 @@ public class TicketsController(ITicketService tickets) : ControllerBase
         => Ok(await tickets.AssignAgentAsync(id, request.AgentId, cancellationToken));
 
     /// <summary>
-    /// The only way to change a ticket's status (ADR 0003). Illegal transitions are rejected with
+    /// The only way to change a ticket's status. Illegal transitions are rejected with
     /// the list of currently allowed moves.
     /// </summary>
     [HttpPost("{id:guid}/status")]
