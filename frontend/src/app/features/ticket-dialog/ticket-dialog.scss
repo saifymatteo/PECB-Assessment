@@ -1,0 +1,36 @@
+.ticket-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  min-width: 480px;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .row {
+    display: flex;
+    gap: 0.75rem;
+
+    mat-form-field {
+      flex: 1;
+    }
+  }
+}
+
+.server-error {
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+mat-dialog-actions {
+  mat-spinner {
+    display: inline-block;
+    margin-right: 0.25rem;
+  }
+}

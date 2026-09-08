@@ -1,0 +1,140 @@
+<section class="page">
+  <header class="page-header">
+    <h1>Tickets</h1>
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon>
+      New ticket
+    </button>
+  </header>
+
+  <div class="filters">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search</mat-label>
+      <input matInput [formControl]="search" placeholder="Reference, title or customer name">
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [formControl]="status">
+        <mat-option value="">All</mat-option>
+        @for (option of statusOptions; track option) {
+          <mat-option [value]="option">{{ statusLabels[option] }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Priority</mat-label>
+      <mat-select [formControl]="priority">
+        <mat-option value="">All</mat-option>
+        @for (option of priorityOptions; track option) {
+          <mat-option [value]="option">{{ priorityLabels[option] }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Assigned agent</mat-label>
+      <mat-select [formControl]="agentId">
+        <mat-option value="">Anyone</mat-option>
+        @for (agent of agents(); track agent.id) {
+          <mat-option [value]="agent.id">{{ agent.fullName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox [formControl]="overdueOnly" class="overdue-toggle">Overdue only</mat-checkbox>
+  </div>
+
+  <div class="table-card">
+    @if (loading()) {
+      <div class="state">
+        <mat-spinner diameter="40" />
+        <p>Loading tickets…</p>
+      </div>
+    } @else if (loadError()) {
+      <div class="state error">
+        <mat-icon>cloud_off</mat-icon>
+        <p>{{ loadError() }}</p>
+      </div>
+    } @else if (tickets().length === 0) {
+      <div class="state">
+        <mat-icon>inbox</mat-icon>
+        <p>No tickets match your filters.</p>
+      </div>
+    } @else {
+      <div class="table-scroll">
+        <table mat-table [dataSource]="tickets()">
+          <ng-container matColumnDef="reference">
+            <th mat-header-cell *matHeaderCellDef>Reference</th>
+            <td mat-cell *matCellDef="let ticket">
+              <a [routerLink]="['/tickets', ticket.id]" class="reference">{{ ticket.reference }}</a>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <td mat-cell *matCellDef="let ticket" class="title-cell">
+              {{ ticket.title }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="customerName">
+            <th mat-header-cell *matHeaderCellDef>Customer</th>
+            <td mat-cell *matCellDef="let ticket">{{ ticket.customerName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef>Priority</th>
+            <td mat-cell *matCellDef="let ticket">
+              <span class="chip" [class]="'chip-priority-' + ticket.priority.toLowerCase()">
+                {{ priorityLabel(ticket.priority) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let ticket">
+              <span class="chip" [class]="'chip-status-' + ticket.status.toLowerCase()">
+                {{ statusLabel(ticket.status) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="agent">
+            <th mat-header-cell *matHeaderCellDef>Agent</th>
+            <td mat-cell *matCellDef="let ticket">{{ ticket.assignedAgentName ?? '—' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="dueDate">
+            <th mat-header-cell *matHeaderCellDef>Due</th>
+            <td mat-cell *matCellDef="let ticket">
+              {{ ticket.dueDate | date: 'MMM d, HH:mm' }}
+              @if (ticket.isOverdue) {
+                <span class="chip chip-overdue" matTooltip="Past due and not resolved">Overdue</span>
+              }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            [class.overdue-row]="row.isOverdue"
+            [routerLink]="['/tickets', row.id]"
+            class="clickable-row"></tr>
+        </table>
+      </div>
+
+      <mat-paginator
+        [length]="total()"
+        [pageIndex]="pageIndex()"
+        [pageSize]="pageSize()"
+        [pageSizeOptions]="[10, 20, 50]"
+        (page)="onPage($event)"
+        showFirstLastButtons />
+    }
+  </div>
+</section>

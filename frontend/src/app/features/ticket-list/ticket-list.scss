@@ -1,0 +1,160 @@
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+
+  .search-field {
+    flex: 1 1 260px;
+    min-width: 240px;
+  }
+
+  mat-form-field {
+    width: 170px;
+  }
+
+  .overdue-toggle {
+    margin-left: 0.5rem;
+    padding-bottom: 1.25rem; // aligns with the raised form fields
+  }
+}
+
+.table-card {
+  background: var(--mat-sys-surface);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--mat-sys-level1, 0 2px 6px rgba(0, 0, 0, 0.12));
+}
+
+.tickets-table {
+  width: 100%;
+}
+
+.clickable-row {
+  cursor: pointer;
+
+  &:hover {
+    background: var(--mat-sys-surface-container);
+  }
+}
+
+.overdue-row {
+  background: var(--mat-sys-error-container);
+
+  &:hover {
+    background: var(--mat-sys-error-container);
+    filter: brightness(0.97);
+  }
+}
+
+.title-cell {
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reference {
+  color: var(--mat-sys-primary);
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+
+  &.chip-priority-critical {
+    background: #fde8e8;
+    color: #b71c1c;
+  }
+
+  &.chip-priority-high {
+    background: #fff3e0;
+    color: #e65100;
+  }
+
+  &.chip-priority-normal {
+    background: #e8f0fe;
+    color: #1a55c4;
+  }
+
+  &.chip-priority-low {
+    background: #eceff1;
+    color: #546e7a;
+  }
+
+  &.chip-status-new {
+    background: #e3f2fd;
+    color: #0277bd;
+  }
+
+  &.chip-status-inprogress {
+    background: #fff8e1;
+    color: #b28704;
+  }
+
+  &.chip-status-resolved {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.chip-status-closed {
+    background: #eceff1;
+    color: #607d8b;
+  }
+
+  &.chip-overdue {
+    background: #b71c1c;
+    color: white;
+    margin-left: 0.4rem;
+  }
+}
+
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 1rem;
+  color: var(--mat-sys-on-surface-variant);
+
+  mat-icon {
+    font-size: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
