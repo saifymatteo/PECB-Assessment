@@ -9,32 +9,46 @@ technical assignment.
 
 ---
 
-## Running it locally
+## Running it
 
-### Prerequisites
+Two ways to run the app. Pick one — they both serve the UI on **http://localhost:4200**,
+so don't run them at the same time.
 
-- [Docker](https://docs.docker.com/get-docker/) (for the PostgreSQL database)
-- [.NET SDK 10](https://dotnet.microsoft.com/download/dotnet/10.0)
-- Node.js 20+ and npm
-
-### 1. Database
+### Option A — everything in Docker (no .NET or Node needed)
 
 ```bash
-docker compose up -d
+docker compose up --build -d
+```
+
+That's it. One command brings up PostgreSQL, the API (which applies migrations and seeds
+demo data on startup) and an nginx container that serves the built Angular app and proxies
+`/api/*` to the API container. Browse to **http://localhost:4200**.
+
+Tear down with `docker compose down` (add `-v` to also reset the database volume).
+
+### Option B — local development (hot reload)
+
+Prerequisites: [Docker](https://docs.docker.com/get-docker/),
+[.NET SDK 10](https://dotnet.microsoft.com/download/dotnet/10.0), Node.js 20+ and npm.
+
+**1. Database**
+
+```bash
+docker compose up -d db
 ```
 
 Starts PostgreSQL 17 on `localhost:5432` (user/password/db: `supportdesk` / `supportdesk` / `supportdesk`).
 
-### 2. Backend API
+**2. Backend API**
 
 ```bash
 cd backend/src/SupportDesk.Api
 dotnet run
 ```
 
-On startup (development) the API applies EF Core migrations and seeds demo data
+On startup the API applies EF Core migrations and seeds demo data
 (5 agents, 20 tickets across all statuses/priorities, several of them overdue) — no extra setup.
-It listens on **http://localhost:5000**; an OpenAPI document is served at `/openapi/v1.json`.
+It listens on **http://localhost:5000**; an OpenAPI document is served at `/openapi/v1.json` in Development.
 
 Run the backend tests:
 
@@ -43,7 +57,7 @@ cd backend
 dotnet test
 ```
 
-### 3. Frontend
+**3. Frontend**
 
 ```bash
 cd frontend
@@ -51,8 +65,9 @@ npm install
 npm start
 ```
 
-Opens on **http://localhost:4200**; a dev proxy (`proxy.conf.json`) forwards `/api/*`
-to the backend, so no CORS configuration is needed.
+Opens on **http://localhost:4200**. The dev proxy is wired into `angular.json`
+(`proxy.conf.json` forwards `/api/*` to the backend), so it works with plain `ng serve`
+as well — no CORS configuration is needed.
 
 Run the frontend tests:
 

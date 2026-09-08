@@ -29,17 +29,18 @@ var app = builder.Build();
 
 app.UseExceptionHandler();
 
+app.MapControllers();
+
+// Apply migrations and seed demo data on startup in every environment (the seeder is a
+// no-op when data exists) — the Docker image runs in Production and still needs a usable DB.
+await using var scope = app.Services.CreateAsyncScope();
+var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+await db.Database.MigrateAsync();
+await DbSeeder.SeedAsync(db);
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-
-    // Apply migrations and seed demo data on first run (seeder is a no-op when data exists).
-    await using var scope = app.Services.CreateAsyncScope();
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await db.Database.MigrateAsync();
-    await DbSeeder.SeedAsync(db);
 }
-
-app.MapControllers();
 
 app.Run();

@@ -16,5 +16,32 @@ services:
       timeout: 3s
       retries: 10
 
+  # Full-stack mode: `docker compose up --build` brings up database + API + UI with no
+  # .NET or Node installed. The API migrates and seeds the database on startup.
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: supportdesk-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Inside the compose network the database host is the service name, not localhost.
+      ConnectionStrings__SupportDesk: "Host=db;Port=5432;Database=supportdesk;Username=supportdesk;Password=supportdesk"
+    ports:
+      - "5000:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: supportdesk-frontend
+    depends_on:
+      - api
+    ports:
+      # Serve the UI at http://localhost:4200 — /api is proxied to the api container.
+      - "4200:80"
+
 volumes:
   supportdesk-pgdata:
