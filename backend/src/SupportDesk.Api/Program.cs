@@ -1,10 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using SupportDesk.Api.Features;
 using SupportDesk.Api.Infrastructure;
 using SupportDesk.Api.Infrastructure.ErrorHandling;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o =>
+        o.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("SupportDesk")));
@@ -13,6 +16,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // default ProblemDetails pipeline (500 responses stay sanitized).
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<BusinessRuleExceptionHandler>();
+builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
+
+builder.Services.AddScoped<TicketReferenceGenerator>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<IAgentService, AgentService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();

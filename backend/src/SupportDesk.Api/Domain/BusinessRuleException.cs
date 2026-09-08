@@ -33,3 +33,9 @@ public sealed class AgentAssignmentRequiredException()
     : BusinessRuleException(
         "The ticket must be assigned to an active agent before it can move to In Progress.",
         "AGENT_ASSIGNMENT_REQUIRED");
+
+/// <summary>Agent emails are unique; creating a second agent with the same email is rejected.</summary>
+public sealed class DuplicateEmailException(string email)
+    : BusinessRuleException(
+        $"An agent with email '{email}' already exists.",
+        "EMAIL_ALREADY_IN_USE");
