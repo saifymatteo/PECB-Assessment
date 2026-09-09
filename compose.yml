@@ -1,23 +1,13 @@
-services:
-  db:
-    image: postgres:17-alpine
-    container_name: supportdesk-db
-    environment:
-      POSTGRES_USER: supportdesk
-      POSTGRES_PASSWORD: supportdesk
-      POSTGRES_DB: supportdesk
-    ports:
-      - "5432:5432"
-    volumes:
-      - supportdesk-pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U supportdesk -d supportdesk"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
+# Full-stack deployment: database + API + nginx-hosted UI, with no .NET or Node installed.
+# Local development uses compose.db.yml (database only) instead - see README.md. The database
+# service is defined there and pulled in below, so the two files can never drift apart and
+# both modes reuse the same db container and data volume.
+name: supportdesk
 
-  # Full-stack mode: `docker compose up --build` brings up database + API + UI with no
-  # .NET or Node installed. The API migrates and seeds the database on startup.
+include:
+  - compose.db.yml
+
+services:
   api:
     build:
       context: ./backend
@@ -40,8 +30,5 @@ services:
     depends_on:
       - api
     ports:
-      # Serve the UI at http://localhost:4200 — /api is proxied to the api container.
+      # Serve the UI at http://localhost:4200 - /api is proxied to the api container.
       - "4200:80"
-
-volumes:
-  supportdesk-pgdata:

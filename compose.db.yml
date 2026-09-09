@@ -1,0 +1,32 @@
+# Infrastructure only: PostgreSQL, for running the API and the Angular app on the host.
+# See "Local development" in README.md - this file exists so that local development does not
+# have to reach into the full-stack compose file, whose api/frontend containers publish the
+# very ports (5000 and 4200) that `dotnet run` and `ng serve` need.
+#
+# compose.yml `include`s this file, so both modes share one Compose project (`supportdesk`)
+# and therefore the same db service definition, container name and data volume. Switching
+# between the two modes keeps your data and cannot double-book port 5432.
+
+name: supportdesk
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: supportdesk-db
+    environment:
+      POSTGRES_USER: supportdesk
+      POSTGRES_PASSWORD: supportdesk
+      POSTGRES_DB: supportdesk
+    ports:
+      # Published to the host so an API running on the host can reach it as localhost:5432.
+      - "5432:5432"
+    volumes:
+      - supportdesk-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U supportdesk -d supportdesk"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  supportdesk-pgdata:
