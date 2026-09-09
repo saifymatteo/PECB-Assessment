@@ -17,13 +17,12 @@ public static class DbSeeder
 
         var now = DateTime.UtcNow;
 
-        // ---- Agents (5, one inactive, every department covered) ------------------------
+        // ---- Agents (5, one later deactivated, every department covered) ----------------
         var dana = new Agent("Dana Whitfield", "dana.whitfield@supportdesk.test", AgentDepartment.Technical);
         var evan = new Agent("Evan Ortiz", "evan.ortiz@supportdesk.test", AgentDepartment.Billing);
         var gina = new Agent("Gina Kowalski", "gina.kowalski@supportdesk.test", AgentDepartment.General);
         var marcus = new Agent("Marcus Lee", "marcus.lee@supportdesk.test", AgentDepartment.Technical);
-        var priya = new Agent("Priya Nair", "priya.nair@supportdesk.test", AgentDepartment.General, active: false);
-        priya.SetActive(false); // rule 4 is demoable: deactivated agent stays in the picker data but is rejected
+        var priya = new Agent("Priya Nair", "priya.nair@supportdesk.test", AgentDepartment.General);
 
         db.Agents.AddRange(dana, evan, gina, marcus, priya);
         await db.SaveChangesAsync();
@@ -38,16 +37,16 @@ public static class DbSeeder
             new("Cannot reset password", "Reset link expires immediately for all users.", "Tom Ives", "tom.ivies@brightpath.io", TicketPriority.Critical, TicketStatus.New, 1.0, agent: null),
             new("Data export stuck", "CSV export has been pending for an hour.", "Lena Fischer", "lena.fischer@nordwind.de", TicketPriority.High, TicketStatus.New, 12.0, agent: null),
             new("Invoice VAT amount wrong", "December invoice shows 25% VAT instead of 20%.", "Omar Haddad", "omar.haddad@globex.com", TicketPriority.Normal, TicketStatus.New, 5.0, evan),
-            new("Mobile app crashes on login", "App force-closes after tapping 'Sign in' on Android 15.", "Sara Kim", "sara.kim@zenko.jp", TicketPriority.Low, TicketStatus.New, 8.0, agent: null),
+            new("Mobile app crashes on login", "App force-closes after tapping 'Sign in' on Android 15.", "Sara Kim", "sara.kim@zenko.jp", TicketPriority.Low, TicketStatus.New, 8.0, priya),
             new("Feature request: dark mode", "Team asks for a dark theme in the dashboard.", "Pete Larsen", "pete.larsen@lumenlabs.dev", TicketPriority.Low, TicketStatus.New, 24.0, agent: null),
 
             new("API returns 401 after token refresh", "All API calls fail once the access token is refreshed.", "Maya Chen", "maya.chen@fableworks.com", TicketPriority.High, TicketStatus.InProgress, 96.0, dana),
             new("Database replication lag", "Read replica is hours behind the primary.", "Igor Petrov", "igor.petrov@datalane.eu", TicketPriority.High, TicketStatus.InProgress, 4.5, marcus),
-            new("Webhook retries too aggressively", "Endpoint receives retries every 10 seconds.", "Chris Doyle", "chris.doyle@spiralworks.com", TicketPriority.Normal, TicketStatus.InProgress, 1.0, gina),
+            new("Webhook retries too aggressively", "Endpoint receives retries every 10 seconds.", "Chris Doyle", "chris.doyle@spiralworks.com", TicketPriority.Normal, TicketStatus.InProgress, 1.0, priya),
             new("SSO login loop", "Users bounce between identity provider and app.", "Ahmed Salah", "ahmed.salah@meridian.org", TicketPriority.Critical, TicketStatus.InProgress, 6.0, marcus, reopened: true),
             new("Email notifications duplicated", "Every notification arrives twice since Monday.", "Julia Moreau", "julia.moreau@vertpart.fr", TicketPriority.Normal, TicketStatus.InProgress, 1.5, evan),
 
-            new("Refund not received", "Customer refunded 10 days ago, nothing on the statement.", "Emma Wilson", "emma.wilson@shopfast.co", TicketPriority.Normal, TicketStatus.Resolved, 120.0, evan),
+            new("Refund not received", "Customer refunded 10 days ago, nothing on the statement.", "Emma Wilson", "emma.wilson@shopfast.co", TicketPriority.Normal, TicketStatus.Resolved, 120.0, priya),
             new("Production outage", "Complete outage of the order service for 12 minutes.", "Tom Novak", "tom.novak@cadencehq.com", TicketPriority.Critical, TicketStatus.Resolved, 0.5, dana),
             new("Billing address won't save", "Form rejects valid postal codes.", "Rita Gomez", "rita.gomez@casaverde.es", TicketPriority.High, TicketStatus.Resolved, 3.0, evan),
             new("Update docs for API v2", "Documentation still references v1 endpoints.", "Leo Martins", "leo.martins@draftly.app", TicketPriority.Low, TicketStatus.Resolved, 2.0, gina),
@@ -96,6 +95,13 @@ public static class DbSeeder
 
             db.Tickets.Add(ticket);
         }
+
+        // Priya "left the team" after working the tickets above. Deactivation does not
+        // retroactively unassign her open tickets, so the demo data includes an inactive
+        // assignee on New / In Progress / Resolved tickets (rule 3 blocks transitions into
+        // In Progress with her as assignee, rule 4 blocks new assignments). The UI marks
+        // her as "(inactive)" in the list filter, the Agent column and the detail picker.
+        priya.SetActive(false);
 
         await db.SaveChangesAsync();
     }
