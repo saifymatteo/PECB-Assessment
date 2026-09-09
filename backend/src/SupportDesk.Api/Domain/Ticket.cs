@@ -89,7 +89,7 @@ public class Ticket
 
     /// <summary>
     /// Rule 2 (transition graph) and rule 3 (an assigned, active agent is required to enter
-    /// In Progress — including when reopening). Rule 6: Resolved/Closed timestamps are set here,
+    /// In Progress - including when reopening). Rule 6: Resolved/Closed timestamps are set here,
     /// by the system. Reopening clears <see cref="ResolvedAt"/> so it always reflects the latest resolution.
     /// </summary>
     public void TransitionTo(TicketStatus target, DateTime now)

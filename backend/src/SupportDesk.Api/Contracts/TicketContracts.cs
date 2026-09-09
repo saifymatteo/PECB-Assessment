@@ -35,7 +35,7 @@ public record TicketDetailDto(
     DateTime? ClosedAt,
     DateTime DueDate,
     bool IsOverdue,
-    /// <summary>Server-side truth about which moves are legal right now — never client-calculated alone.</summary>
+    /// <summary>Server-side truth about which moves are legal right now - never client-calculated alone.</summary>
     IReadOnlyList<string> AllowedTransitions,
     IReadOnlyList<TicketCommentDto> Comments);
 

@@ -16,7 +16,6 @@ import { RouterLink } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, merge, of, startWith, switchMap, tap, catchError, finalize } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { extractApiError } from '../../core/api-error';
 import { Agent, PagedResult, TicketListItem, TicketPriority, TicketStatus } from '../../core/models';
 import { PRIORITY_LABELS, STATUS_LABELS } from '../../core/ticket-labels';
 import { AgentApi, TicketApi } from '../../core/ticket-api';

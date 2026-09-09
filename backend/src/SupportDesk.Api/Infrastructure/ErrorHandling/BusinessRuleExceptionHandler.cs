@@ -7,7 +7,7 @@ namespace SupportDesk.Api.Infrastructure.ErrorHandling;
 /// <summary>
 /// Maps business-rule violations to RFC 7807 ProblemDetails with a machine-readable
 /// errorCode (and allowedTransitions for invalid status moves). Anything not handled here
-/// falls through to the default ProblemDetails 500 handler — clients never see stack traces.
+/// falls through to the default ProblemDetails 500 handler - clients never see stack traces.
 /// </summary>
 public sealed class BusinessRuleExceptionHandler(ILogger<BusinessRuleExceptionHandler> logger) : IExceptionHandler
 {

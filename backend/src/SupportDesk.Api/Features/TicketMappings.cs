@@ -3,7 +3,7 @@ using SupportDesk.Api.Domain;
 
 namespace SupportDesk.Api.Features;
 
-/// <summary>Manual DTO mapping — six endpoints do not justify a mapper dependency.</summary>
+/// <summary>Manual DTO mapping - six endpoints do not justify a mapper dependency.</summary>
 public static class TicketMappings
 {
     public static TicketListItemDto ToListItemDto(this Ticket ticket, DateTime now) => new(

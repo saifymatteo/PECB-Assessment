@@ -34,7 +34,7 @@ npm-debug.log*
 AGENTS.md
 CONTEXT.md
 
-# Scaffold docs — keep only the assignment spec
+# Scaffold docs - keep only the assignment spec
 # (the negation works because docs/* does not exclude docs/ itself)
 docs/*
 !docs/Technical_Assignment_FullStack_Developer.pdf

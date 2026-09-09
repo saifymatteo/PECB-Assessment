@@ -70,7 +70,7 @@ public static class DbSeeder
             if (spec.Agent is not null)
                 ticket.AssignAgent(spec.Agent, createdAt);
 
-            // Comment arrives during triage — while the ticket is still open (rule 5).
+            // Comment arrives during triage - while the ticket is still open (rule 5).
             ticket.AddComment(spec.Agent?.FullName ?? "Intake Bot",
                 spec.Reopened
                     ? "Customer reported the issue again after the first fix."

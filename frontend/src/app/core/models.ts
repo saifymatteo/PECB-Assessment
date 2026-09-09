@@ -1,4 +1,4 @@
-/** API models — mirrored from the ASP.NET Core contracts (kebab-cased to camelCase). */
+/** API models - mirrored from the ASP.NET Core contracts (kebab-cased to camelCase). */
 
 export type TicketStatus = 'New' | 'InProgress' | 'Resolved' | 'Closed';
 export type TicketPriority = 'Low' | 'Normal' | 'High' | 'Critical';

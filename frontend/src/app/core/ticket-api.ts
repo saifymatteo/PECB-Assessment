@@ -13,7 +13,7 @@ import {
   TicketWriteModel,
 } from './models';
 
-/** All ticket HTTP access lives here — components never touch HttpClient. */
+/** All ticket HTTP access lives here - components never touch HttpClient. */
 @Injectable({ providedIn: 'root' })
 export class TicketApi {
   private readonly http = inject(HttpClient);

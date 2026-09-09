@@ -1,4 +1,4 @@
-# Build the API (SDK), then ship only the runtime output — final image ~100 MB.
+# Build the API (SDK), then ship only the runtime output - final image ~100 MB.
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
