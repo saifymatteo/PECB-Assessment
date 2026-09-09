@@ -7,8 +7,6 @@ technical assignment.
 - **Backend**: ASP.NET Core (`.NET 10`) Web API, EF Core 10 + PostgreSQL (Npgsql), xUnit
 - **Frontend**: Angular 20 (standalone components, signals, RxJS), Angular Material, Jasmine/Karma
 
----
-
 ## Getting Started
 
 Two ways to run the app, one Compose file each. Both serve the UI on **<http://localhost:4200>**.
@@ -91,8 +89,6 @@ Run the frontend tests:
 cd frontend
 npx ng test --watch=false --browsers=ChromeHeadless
 ```
-
----
 
 ## Business Rule
 
