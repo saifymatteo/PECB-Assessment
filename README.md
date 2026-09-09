@@ -163,7 +163,7 @@ Unclear spec from the assessment, these were made deliberately:
 
 ## Time spent
 
-The working session started **around 12:30 PM MYT on 8 September 2026** with on and off work. Finished at **10:00 PM MYT on 9 September 2026**.
+The working session started **around 12:30 PM MYT on 8 September 2026** with on and off work. Finished at **12:05 AM MYT on 10 September 2026**.
 
 ## Project structure
 
