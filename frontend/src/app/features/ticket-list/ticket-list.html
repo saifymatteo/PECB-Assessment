@@ -39,7 +39,7 @@
       <mat-select [formControl]="agentId">
         <mat-option value="">Anyone</mat-option>
         @for (agent of agents(); track agent.id) {
-          <mat-option [value]="agent.id">{{ agent.fullName }}</mat-option>
+          <mat-option [value]="agent.id">{{ agent.active ? agent.fullName : agent.fullName + ' (inactive)' }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -105,7 +105,7 @@
 
           <ng-container matColumnDef="agent">
             <th mat-header-cell *matHeaderCellDef>Agent</th>
-            <td mat-cell *matCellDef="let ticket">{{ ticket.assignedAgentName ?? '-' }}</td>
+            <td mat-cell *matCellDef="let ticket">{{ agentLabel(ticket) }}</td>
           </ng-container>
 
           <ng-container matColumnDef="dueDate">

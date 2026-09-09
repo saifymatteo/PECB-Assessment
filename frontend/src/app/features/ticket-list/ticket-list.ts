@@ -116,6 +116,13 @@ export class TicketList implements OnInit {
     return STATUS_LABELS[status];
   }
 
+  /** Inactive agents keep their open-ticket assignments; mark them where they appear. */
+  agentLabel(ticket: TicketListItem): string {
+    if (!ticket.assignedAgentName) return '-';
+    const agent = this.agents().find(a => a.id === ticket.assignedAgentId);
+    return agent && !agent.active ? `${ticket.assignedAgentName} (inactive)` : ticket.assignedAgentName;
+  }
+
   onPage(event: PageEvent): void {
     this.pageIndex.set(event.pageIndex);
     this.pageSize.set(event.pageSize);

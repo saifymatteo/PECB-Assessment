@@ -12,7 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { extractApiError } from '../../core/api-error';
@@ -25,6 +25,7 @@ import { TicketDialog, TicketDialogData } from '../ticket-dialog/ticket-dialog';
   selector: 'app-ticket-detail',
   imports: [
     DatePipe,
+    RouterLink,
     ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,
@@ -56,6 +57,7 @@ export class TicketDetailPage implements OnInit {
   readonly notFound = signal(false);
   readonly saving = signal(false);
   readonly agents = signal<Agent[]>([]);
+  readonly agentsLoaded = signal(false);
 
   readonly commentForm = new FormGroup({
     authorName: new FormControl('', { validators: [Validators.required, Validators.maxLength(200)], nonNullable: true }),
@@ -66,6 +68,13 @@ export class TicketDetailPage implements OnInit {
 
   readonly isClosed = computed(() => this.ticket()?.status === 'Closed');
   readonly isOverdue = computed(() => this.ticket()?.isOverdue ?? false);
+
+  /** The ticket's assignee when they are no longer active; rendered as a read-only entry. */
+  readonly inactiveAssigneeName = computed(() => {
+    const ticket = this.ticket();
+    if (!ticket?.assignedAgentId || !this.agentsLoaded()) return null;
+    return this.agents().some(a => a.id === ticket.assignedAgentId) ? null : ticket.assignedAgentName;
+  });
 
   private readonly ticketId = this.route.snapshot.paramMap.get('id') ?? '';
 
@@ -87,7 +96,10 @@ export class TicketDetailPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.agentApi.list().subscribe(all => this.agents.set(all.filter(a => a.active)));
+    this.agentApi.list().subscribe(all => {
+      this.agents.set(all.filter(a => a.active));
+      this.agentsLoaded.set(true);
+    });
     this.load();
   }
 

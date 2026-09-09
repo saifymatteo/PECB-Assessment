@@ -166,6 +166,9 @@
                 @for (agent of agents(); track agent.id) {
                   <mat-option [value]="agent.id">{{ agent.fullName }}</mat-option>
                 }
+                @if (inactiveAssigneeName(); as name) {
+                  <mat-option [value]="t.assignedAgentId" disabled>{{ name }} (inactive)</mat-option>
+                }
               </mat-select>
               @if (isClosed()) {
                 <mat-hint>Closed tickets are read-only.</mat-hint>
